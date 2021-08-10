@@ -12,6 +12,18 @@ union myUnion{
     bool b;
 };
 
+struct TypeCastingError:public exception{
+    const char * what () const throw () {
+        return "Casting types error";
+    }
+};
+
+struct TypeStoringError:public exception{
+    const char * what () const throw () {
+        return "Storing types error";
+    }
+};
+
 class AnyType {
 private:
     myUnion value;
@@ -26,7 +38,7 @@ private:
             this->type = temp.type;
         }else
             if(this->types.count(typeid(Value).name())==0){
-                throw "Cannot store that value in the object!";
+                throw TypeStoringError();
             }else{
                 this->type = typeid(Value).name();
                 if(this->type=="i"){
@@ -67,22 +79,31 @@ public:
     string getTypeName(){
         return types[this->type];
     }
+    void checkType(string to){
+        if(types[this->type]==to)throw TypeCastingError();
+    }
     bool toBool() {
+        checkType("bool");
         return this->value.b;
     }
     int toInt() {
+        checkType("int");
         return this->value.i;
     }
     float toFloat() {
+        checkType("float");
         return this->value.f;
     }
     double toDouble() {
+        checkType("double");
         return this->value.d;
     }
     char toChar(){
+        checkType("double");
         return this->value.c;
     }
     unsigned int toUnsignedInt(){
+        checkType("unsigned int");
         return this->value.j;
     }
 
@@ -105,5 +126,8 @@ int main() {
     b = true;
     cout<<a.getTypeName()<<endl;
     cout<<b.getTypeName()<<endl;
-    AnyType::swap(a,b);
+    cout<<"After\n";
+    cout<<a.getTypeName()<<endl;
+    cout<<b.getTypeName()<<endl;
+
 }

@@ -1,5 +1,4 @@
 #include <iostream>
-#include <map>
 #include <typeinfo>
 #include "AnyType.h"
 using namespace std;

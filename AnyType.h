@@ -1,6 +1,3 @@
-//
-// Created by нободи on 12.08.2021.
-//
 #include <string>
 #include <map>
 #include <typeinfo>
@@ -9,19 +6,22 @@
 using namespace std;
 
 
-struct TypeCastingError:public exception{
+class TypeCastingError:public exception{
+public:
     const char * what () const throw () {
         return "Casting types error";
     }
 };
 
-struct TypeStoringError:public exception{
+class TypeStoringError:public exception{
+public:
     const char * what () const throw () {
         return "Storing types error";
     }
 };
 
-struct GettingNoneObjectError:public exception{
+class GettingNoneObjectError:public exception{
+public:
     const char * what () const throw () {
         return "Getting destroyed object error";
     }
@@ -38,9 +38,9 @@ union myUnion{
 
 class AnyType {
     private:
+        map<string ,string> types = {{"i","int"},{"j","unsigned int"},{"c","char"},{"f","float"},{"d","double"},{"b","bool"}};
         myUnion value;
         string type;
-        map<string ,string> types = {{"i","int"},{"j","unsigned int"},{"c","char"},{"f","float"},{"d","double"},{"b","bool"}};
         template <typename T>
         void assign(T Value){
             if(typeid(Value).name()!=typeid(AnyType).name() || this->types.count(typeid(Value).name())){
